@@ -1,0 +1,26 @@
+﻿@model IEnumerable<PM.Web.Models.Project>
+
+<h1>Projects</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var project in Model)
+        {
+            <tr>
+                <td>@project.Title</td>
+                <td>@project.Description</td>
+                <td>@project.StartDate.ToShortDateString()</td>
+                <td>@project.EndDate.ToShortDateString()</td>
+                <td>@project.Status</td>
+            </tr>
+        }
+    </tbody>
+</table>
