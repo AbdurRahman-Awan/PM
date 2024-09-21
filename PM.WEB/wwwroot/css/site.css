@@ -1,22 +1,71 @@
-html {
-  font-size: 14px;
+/* General Table Styling */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    color: #f9f9f9; /* Default text color matching the background */
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    .table thead {
+        background-color: #dc3545; /* Header background color */
+    }
+
+    .table th, .table td {
+        padding: 12px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+
+    .table th {
+        color: white; /* White text for the header */
+    }
+
+    .table tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+        color: inherit; /* Inherit text color from the table */
+    }
+
+    .table tbody tr:hover {
+        background-color: #f1f1f1;
+        color: inherit; /* Inherit text color from the table */
+    }
+
+    .table a, .table button {
+        text-decoration: none;
+        color: inherit; /* Inherit text color from table */
+        border: none;
+        background: none;
+        cursor: pointer;
+    }
+
+        .table a:hover, .table button:hover {
+            text-decoration: underline;
+            color: inherit; /* Lighter shade on hover */
+        }
+
+/* Button Hover Effect */
+.create-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #dc3545; /* Button background color */
+    color: white; /* White button text */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 220px; /* Wider button */
+    text-align: center;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    .create-button:hover {
+        background-color: inherit; /* Darker shade on hover */
+    }
+
+/* Add a box shadow for a subtle 3D effect */
+.table, .create-button {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  margin-bottom: 60px;
-}
+    .table tbody tr {
+        transition: background-color 0.3s;
+    }

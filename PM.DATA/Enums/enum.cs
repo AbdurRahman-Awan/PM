@@ -2,8 +2,8 @@
 {
     public enum ProjectStatus
     {
-        Active,
         Deferred,
+        Active,
         Completed
     }
 

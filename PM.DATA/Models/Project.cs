@@ -13,7 +13,7 @@ namespace PM.DATA.Models
         public ProjectStatus Status { get; set; } // Active, Deferred, Completed
 
         // Navigation property
-        public ICollection<TaskItem> Tasks { get; set; }
+        public ICollection<TaskItem> Tasks { get; set; }=new List<TaskItem>();
     }
 
 }

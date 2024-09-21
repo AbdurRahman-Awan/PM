@@ -1,0 +1,36 @@
+﻿@model LoginModel
+
+@{
+    Layout = null; 
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="~/css/login.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <h2>Login</h2>
+            <form asp-action="Login" method="post">
+                <div class="input-group">
+                    <input asp-for="Username" type="text" placeholder="Username" required>
+                </div>
+                <div class="input-group">
+                    <input asp-for="Password" type="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="login-button">Login</button>
+            </form>
+            <div class="error-message">
+                @if (ViewBag.ErrorMessage != null)
+                {
+                    <span>@ViewBag.ErrorMessage</span>
+                }
+            </div>
+        </div>
+    </div>
+</body>
+</html>

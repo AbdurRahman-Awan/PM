@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -68,6 +69,13 @@ namespace PM.API.Controllers
             }
 
             return Unauthorized();
+        }
+        [HttpPost]
+        [Route("logout")]
+        public IActionResult Logout()
+        {
+            HttpContext.SignOutAsync(); // This will clear the authentication session
+            return RedirectToAction("Login", "Auth"); // Redirect to the login page
         }
 
         private string GenerateToken(ApplicationUser user)

@@ -1,6 +1,6 @@
-﻿namespace PM.DATA.Models.Dto
+﻿namespace PM.WEB.Models
 {
-    public class LoginModelDto
+    public class LoginModel
     {
         public string Username { get; set; }
         public string Password { get; set; }

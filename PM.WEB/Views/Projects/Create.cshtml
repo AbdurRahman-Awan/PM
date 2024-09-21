@@ -1,0 +1,95 @@
+﻿@model ProjectModel
+
+<h2>Create Project</h2>
+
+<form asp-action="Create" method="post">
+    <div>
+        <label>Title</label>
+        <input asp-for="Title" />
+    </div>
+    <div>
+        <label>Description</label>
+        <input asp-for="Description" />
+    </div>
+    <div>
+        <label>Start Date</label>
+        <input asp-for="StartDate" type="date" />
+    </div>
+    <div>
+        <label>End Date</label>
+        <input asp-for="EndDate" type="date" />
+    </div>
+    <div>
+        <label>Status</label>
+        <select asp-for="Status">
+            <option value="0">Deferred</option>
+            <option value="1">Active</option>
+            <option value="2">Completed</option>
+        </select>
+    </div>
+    <button type="submit">Create</button>
+</form>
+
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    form {
+        max-width: 500px; /* Limit form width */
+        margin: 0 auto; /* Center the form */
+        padding: 20px;
+        border: 1px solid #ddd; /* Light border around the form */
+        border-radius: 5px; /* Rounded corners */
+        background-color: #f9f9f9; /* Light background for form */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    }
+
+    div {
+        margin-bottom: 15px; /* Space between fields */
+    }
+
+    label {
+        display: block; /* Block display for labels */
+        margin-bottom: 5px; /* Space between label and input */
+    }
+
+    input[type="text"], input[type="date"], select {
+        width: 100%; /* Full width for inputs */
+        padding: 10px; /* Inner padding */
+        border: 1px solid #ccc; /* Light border for inputs */
+        border-radius: 4px; /* Slightly rounded corners */
+    }
+
+        input[type="text"]:focus, input[type="date"]:focus, select:focus {
+            border-color: #dc3545; /* Change border color on focus */
+            outline: none; /* Remove outline */
+        }
+
+    button[type="submit"] {
+        background-color: #dc3545; /* Button background color */
+        color: white; /* White button text */
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px; /* Button padding */
+        cursor: pointer;
+        width: 100%; /* Full width button */
+    }
+
+        button[type="submit"]:hover {
+            background-color: #c82333; /* Darker shade on hover */
+        }
+
+    /* Optional: Add a box shadow for a subtle 3D effect */
+    form {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+</style>

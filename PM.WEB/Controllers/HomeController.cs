@@ -28,5 +28,14 @@ namespace PM.WEB.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove("JWToken");
+
+            return RedirectToAction("Login", "Account", new { area = "" });
+        }
+
+
     }
 }

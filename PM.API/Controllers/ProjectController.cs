@@ -9,7 +9,7 @@ using PM.DATA.Models.Dto;
 
 namespace PM.API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ProjectController : ControllerBase
@@ -21,7 +21,8 @@ namespace PM.API.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        // GET: api/project
+        [HttpGet(Name = "GetProjects")]
         public async Task<IActionResult> GetProjects([FromQuery] PaginationParamsDto pagination, [FromQuery] string status = null)
         {
             // Basic validation for pagination parameters
@@ -58,20 +59,48 @@ namespace PM.API.Controllers
 
             return Ok(projects);
         }
-        [HttpPost]
-        public async Task<IActionResult> CreateProject([FromBody] Project project)
+        // GET: api/project/{id}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProjectById(int id)
         {
-            if (project.StartDate >= project.EndDate)
+            var project = await _context.Projects
+                                        .Include(p => p.Tasks) // If you want to include related entities
+                                        .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (project == null)
             {
-                return BadRequest("Start date must be earlier than end date.");
+                return NotFound(); // Return 404 if the project is not found
             }
+
+            return Ok(project); // Return 200 with the project data
+        }
+
+
+        [HttpPost(Name = "CreateProject")]
+        public async Task<IActionResult> CreateProject([FromBody] CreateProjectDto projectDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var project = new Project
+            {
+                Title = projectDto.Title,
+                Description = projectDto.Description,
+                StartDate = projectDto.StartDate,
+                EndDate = projectDto.EndDate,
+                Status = projectDto.Status
+            };
 
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
-            return Ok(project);
+            return CreatedAtAction(nameof(GetProjects), new { id = project.Id }, project);
         }
 
-        [HttpPut("{id}")]
+
+        // PUT: api/project/{id}
+        [HttpPut("{id}", Name = "UpdateProject")]
         public async Task<IActionResult> UpdateProject(int id, [FromBody] Project project)
         {
             var existingProject = await _context.Projects.FindAsync(id);
@@ -96,7 +125,8 @@ namespace PM.API.Controllers
             return Ok(existingProject);
         }
 
-        [HttpDelete("{id}")]
+        // DELETE: api/project/{id}
+        [HttpDelete("{id}", Name = "DeleteProject")]
         public async Task<IActionResult> DeleteProject(int id)
         {
             var project = await _context.Projects.FindAsync(id);
@@ -110,6 +140,4 @@ namespace PM.API.Controllers
             return NoContent();
         }
     }
-
-
 }

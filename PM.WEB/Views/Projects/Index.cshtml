@@ -1,7 +1,9 @@
-﻿@model IEnumerable<PM.Web.Models.Project>
+﻿@model List<ProjectModel>
 
-<h1>Projects</h1>
-<table>
+<h2>Projects</h2>
+<a class="create-button" asp-action="Create">New Project</a>
+
+<table class="table">
     <thead>
         <tr>
             <th>Title</th>
@@ -9,6 +11,7 @@
             <th>Start Date</th>
             <th>End Date</th>
             <th>Status</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -20,7 +23,14 @@
                 <td>@project.StartDate.ToShortDateString()</td>
                 <td>@project.EndDate.ToShortDateString()</td>
                 <td>@project.Status</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@project.Id">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@project.Id" method="post" style="display:inline;">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
             </tr>
         }
     </tbody>
 </table>
+
