@@ -13,11 +13,11 @@
     </div>
     <div>
         <label>Start Date</label>
-        <input asp-for="StartDate" type="date" />
+        <input asp-for="StartDate" type="date" id="startDate" />
     </div>
     <div>
         <label>End Date</label>
-        <input asp-for="EndDate" type="date" />
+        <input asp-for="EndDate" type="date" id="endDate" />
     </div>
     <div>
         <label>Status</label>
@@ -29,7 +29,6 @@
     </div>
     <button type="submit">Create</button>
 </form>
-
 
 <style>
     body {
@@ -43,53 +42,49 @@
     }
 
     form {
-        max-width: 500px; /* Limit form width */
-        margin: 0 auto; /* Center the form */
+        max-width: 500px;
+        margin: 0 auto;
         padding: 20px;
-        border: 1px solid #ddd; /* Light border around the form */
-        border-radius: 5px; /* Rounded corners */
-        background-color: #f9f9f9; /* Light background for form */
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    }
-
-    div {
-        margin-bottom: 15px; /* Space between fields */
-    }
-
-    label {
-        display: block; /* Block display for labels */
-        margin-bottom: 5px; /* Space between label and input */
-    }
-
-    input[type="text"], input[type="date"], select {
-        width: 100%; /* Full width for inputs */
-        padding: 10px; /* Inner padding */
-        border: 1px solid #ccc; /* Light border for inputs */
-        border-radius: 4px; /* Slightly rounded corners */
-    }
-
-        input[type="text"]:focus, input[type="date"]:focus, select:focus {
-            border-color: #dc3545; /* Change border color on focus */
-            outline: none; /* Remove outline */
-        }
-
-    button[type="submit"] {
-        background-color: #dc3545; /* Button background color */
-        color: white; /* White button text */
-        border: none;
+        border: 1px solid #ddd;
         border-radius: 5px;
-        padding: 10px 20px; /* Button padding */
-        cursor: pointer;
-        width: 100%; /* Full width button */
-    }
-
-        button[type="submit"]:hover {
-            background-color: #c82333; /* Darker shade on hover */
-        }
-
-    /* Optional: Add a box shadow for a subtle 3D effect */
-    form {
+        background-color: #f9f9f9;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
+    div {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"], input[type="date"], select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+        input[type="text"]:focus, input[type="date"]:focus, select:focus {
+            border-color: #dc3545;
+            outline: none;
+        }
+
+    button[type="submit"] {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+        width: 100%;
+    }
+
+        button[type="submit"]:hover {
+            background-color: #c82333;
+        }
 </style>
+
+

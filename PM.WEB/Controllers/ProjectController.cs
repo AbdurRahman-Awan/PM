@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using PM.DATA.Models.Dto;
 using PM.WEB.Models;
 using System.Net.Http.Headers;
 using System.Text;
@@ -15,20 +16,22 @@ namespace PM.WEB.Controllers
             _httpClientFactory = httpClientFactory;
         }
 
+
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery] PaginationParamsDto pagination)
         {
             var client = _httpClientFactory.CreateClient("ApiClient");
-            var response = await client.GetAsync("/api/Project");
+
+            var response = await client.GetAsync($"/api/Project?pageNumber={pagination.PageNumber}&pageSize={pagination.PageSize}");
 
             if (response.IsSuccessStatusCode)
             {
                 var jsonResponse = await response.Content.ReadAsStringAsync();
-                var projects = JsonConvert.DeserializeObject<List<ProjectModel>>(jsonResponse);
-                return View(projects);
+                var paginatedResponse = JsonConvert.DeserializeObject<PaginatedResponse<ProjectModel>>(jsonResponse);
+                return View(paginatedResponse);
             }
 
-            return View(new List<ProjectModel>());
+            return View(new PaginatedResponse<ProjectModel>());
         }
 
         [HttpGet]
@@ -47,10 +50,9 @@ namespace PM.WEB.Controllers
             }
 
             var client = _httpClientFactory.CreateClient("ApiClient");
-            var content = new StringContent(JsonConvert.SerializeObject(project), Encoding.UTF8, "application/json");
 
-            // Updated endpoint
-            var response = await client.PostAsync("api/project", content); // Changed to "api/project"
+            var content = new StringContent(JsonConvert.SerializeObject(project), Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("api/project", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -58,74 +60,47 @@ namespace PM.WEB.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Optionally, log response details for debugging
             var errorResponse = await response.Content.ReadAsStringAsync();
             TempData["ErrorMessages"] = $"Error creating project: {errorResponse}";
 
             return View(project);
         }
 
-
-
-
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            // Ensure that the ID is valid
             if (id <= 0)
             {
                 return BadRequest("Invalid Project ID.");
             }
 
-            try
+            var client = _httpClientFactory.CreateClient("ApiClient");
+
+            var response = await client.GetAsync($"api/Project/{id}");
+
+            if (response.IsSuccessStatusCode)
             {
-                var client = _httpClientFactory.CreateClient("ApiClient");
-                var response = await client.GetAsync($"api/Project/{id}");
-
-                // Check if the API call was successful
-                if (response.IsSuccessStatusCode)
-                {
-                    var jsonResponse = await response.Content.ReadAsStringAsync();
-                    var project = JsonConvert.DeserializeObject<ProjectModel>(jsonResponse);
-
-                    // Check if the project was found
-                    if (project == null)
-                    {
-                        return NotFound("Project not found.");
-                    }
-
-                    // Return the view with the project model to edit
-                    return View(project);
-                }
-                else
-                {
-                    // Handle different response codes
-                    if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                    {
-                        return NotFound("Project not found.");
-                    }
-
-                    // Log the response for debugging purposes
-                    var errorResponse = await response.Content.ReadAsStringAsync();
-                    // Log the error here if needed
-
-                    return StatusCode((int)response.StatusCode, "Error fetching project details.");
-                }
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var project = JsonConvert.DeserializeObject<ProjectModel>(jsonResponse);
+                return project != null ? View(project) : NotFound("Project not found.");
             }
-            catch (HttpRequestException ex)
+            else
             {
-                // Log the exception
-                // _logger.LogError(ex, "Error occurred while fetching project details.");
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return NotFound("Project not found.");
+                }
 
-                return StatusCode(500, "Internal server error. Please try again later.");
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                return StatusCode((int)response.StatusCode, "Error fetching project details.");
             }
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Edit(ProjectModel project)
         {
             var client = _httpClientFactory.CreateClient("ApiClient");
+
             var content = new StringContent(JsonConvert.SerializeObject(project), Encoding.UTF8, "application/json");
             var response = await client.PutAsync($"/api/Project/{project.Id}", content);
 
@@ -142,6 +117,7 @@ namespace PM.WEB.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var client = _httpClientFactory.CreateClient("ApiClient");
+
             var response = await client.DeleteAsync($"/api/Project/{id}");
 
             if (response.IsSuccessStatusCode)

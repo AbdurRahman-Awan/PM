@@ -89,7 +89,24 @@
             </text>
         }
     </script>
-   
+    <script>
+        document.getElementById('startDate').addEventListener('change', function () {
+            const startDate = new Date(this.value);
+            const endDateInput = document.getElementById('endDate');
+
+            if (startDate) {
+                // Set the min attribute of the end date to be the start date
+                const minEndDate = startDate.toISOString().split('T')[0];
+                endDateInput.setAttribute('min', minEndDate);
+                // Optionally reset the end date if it's before the new min date
+                if (new Date(endDateInput.value) < startDate) {
+                    endDateInput.value = minEndDate;
+                }
+            } else {
+                endDateInput.removeAttribute('min'); // Remove min if no start date
+            }
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

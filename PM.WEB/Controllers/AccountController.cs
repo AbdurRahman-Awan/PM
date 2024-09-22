@@ -44,17 +44,25 @@ namespace PM.WEB.Controllers
                 HttpContext.Session.SetString("JWToken", token);
 
                 // Redirect to a protected page
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Projects");
             }
             else
             {
                 // Handle login failure
-                ViewBag.ErrorMessage = "Invalid login attempt.";
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    ViewBag.ErrorMessage = "Invalid username or password.";
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "An error occurred during login. Please try again.";
+                }
                 return View(model);
             }
         }
 
-     
+
+
     }
 
     public class TokenResponse

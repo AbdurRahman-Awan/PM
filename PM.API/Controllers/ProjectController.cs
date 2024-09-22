@@ -51,14 +51,27 @@ namespace PM.API.Controllers
                 }
             }
 
+            var totalItems = await query.CountAsync(); // Get total items for pagination
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pagination.PageSize); // Calculate total pages
+
             var projects = await query
                 .OrderByDescending(p => p.StartDate)
                 .Skip((pagination.PageNumber - 1) * pagination.PageSize)
                 .Take(pagination.PageSize)
                 .ToListAsync();
 
-            return Ok(projects);
+            var paginatedResponse = new PaginatedResponse<Project>
+            {
+                Items = projects,
+                PageNumber = pagination.PageNumber,
+                PageSize = pagination.PageSize,
+                TotalPages = totalPages,
+                TotalItems = totalItems
+            };
+
+            return Ok(paginatedResponse);
         }
+
         // GET: api/project/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProjectById(int id)

@@ -1,4 +1,5 @@
-﻿@model List<ProjectModel>
+﻿@using PM.DATA.Models.Dto
+@model PaginatedResponse<ProjectModel>
 
 <h2>Projects</h2>
 <a class="create-button" asp-action="Create">New Project</a>
@@ -15,22 +16,74 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var project in Model)
+        @if (Model.Items == null || !Model.Items.Any())
         {
             <tr>
-                <td>@project.Title</td>
-                <td>@project.Description</td>
-                <td>@project.StartDate.ToShortDateString()</td>
-                <td>@project.EndDate.ToShortDateString()</td>
-                <td>@project.Status</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@project.Id">Edit</a>
-                    <form asp-action="Delete" asp-route-id="@project.Id" method="post" style="display:inline;">
-                        <button type="submit">Delete</button>
-                    </form>
-                </td>
+                <td colspan="6" style="text-align: center;">No projects available.</td>
             </tr>
         }
+        else
+        {
+            @foreach (var project in Model.Items)
+            {
+                <tr>
+                    <td>@project.Title</td>
+                    <td>@project.Description</td>
+                    <td>@project.StartDate.ToShortDateString()</td>
+                    <td>@project.EndDate.ToShortDateString()</td>
+                    <td>@project.Status</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@project.Id">Edit</a>
+                        <form asp-action="Delete" asp-route-id="@project.Id" method="post" style="display:inline;">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
     </tbody>
+
 </table>
+
+<!-- Pagination Controls -->
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        @if (Model.PageNumber > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageNumber - 1)" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link" aria-hidden="true">&laquo;</span>
+            </li>
+        }
+
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@i">@i</a>
+            </li>
+        }
+
+        @if (Model.PageNumber < Model.TotalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageNumber + 1)" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link" aria-hidden="true">&raquo;</span>
+            </li>
+        }
+    </ul>
+</nav>
 

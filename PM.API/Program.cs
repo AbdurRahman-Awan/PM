@@ -35,6 +35,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
+
+// Configure Swagger
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Project Management API", Version = "v1" });
@@ -50,31 +52,32 @@ builder.Services.AddSwaggerGen(c =>
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
-        { new OpenApiSecurityScheme
-          {
-              Reference = new OpenApiReference
-              {
-                  Type = ReferenceType.SecurityScheme,
-                  Id = "Bearer"
-              }
-          }, new string[] {} }
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
     });
 });
 
+// Configure Identity Options
 builder.Services.Configure<IdentityOptions>(options =>
 {
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);  // Lockout time
-    options.Lockout.MaxFailedAccessAttempts = 5;  // Number of failed attempts before lockout
-    options.Lockout.AllowedForNewUsers = true;  // Enable lockout for new users
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true;
 });
 
 // Add controllers and FluentValidation
 builder.Services.AddControllers();
 builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ProjectValidator>());
-
-// Add Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -91,9 +94,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
+app.MapControllers();
 
 app.Run();
